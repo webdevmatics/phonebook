@@ -15,7 +15,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary">Login</v-btn>
+                <v-btn color="primary" @click='logIn'>Login</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -31,6 +31,27 @@ export default {
       return {
         email:null,
         password:null
+      }
+    },
+
+    methods: {
+
+      logIn(){
+        axios.post('/login',{email:this.email,password:this.password})
+        .then((response)=>{
+            let accessToken=response.data.auth.access_token;
+            localStorage.setItem('token',accessToken);
+            localStorage.setItem('user',response.data.user.name);
+
+            window.isSignedIn=true;
+
+            Bus.$emit('loggedIn');
+            this.$router.push('/');
+        })
+        .catch((error)=>{
+            console.log(error);
+        })
+        
       }
     }
 

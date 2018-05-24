@@ -19,6 +19,7 @@ export default {
     },
 
     created(){
+      Bus.$emit('logout');
       localStorage.removeItem('token');
     }
 

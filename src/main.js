@@ -7,6 +7,7 @@ import Vuetify from 'vuetify'
 import axios from 'axios'
 import 'vuetify/dist/vuetify.min.css'
 
+window.Bus=new Vue;
 window.axios=axios
 
 window.token= localStorage.getItem('token');

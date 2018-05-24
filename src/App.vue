@@ -8,7 +8,6 @@
          {{menu.name}}
        </v-btn>
 
-       <v-btn @click="getInfo" color="success">get userinfo</v-btn>
       </span>
      
     </v-toolbar-items>
@@ -24,28 +23,45 @@ export default {
   data () {
     return {
       title:"PhoneBook",
-      menus:[
+      menus:[],
+      noAuthMenu:[
       {name:"Signup",route:"Signup"},
       {name:"Login",route:"Login"}, 
-      ]
+      ],
+      authMenu:[{
+        name:"Logout",route:"Logout"
+      }]
     }
   },
   name: 'App',
   methods:{
-    getInfo(){
-      axios.get('/user').
-      then(response=>{
-        console.log(response)
-      })
+
+    onLoggedIn(){
+     
+      this.menus=this.authMenu;
+    },
+    onLogout(){
+     
+      this.menus=this.noAuthMenu;
     }
   },
   mounted(){
     if(token){
-      let authMenu=[{
-        name:"Logout",route:"Logout"
-      }]
-      this.menus=authMenu;
+      this.onLoggedIn();
     }
+  },
+
+  created(){
+    this.menus=this.noAuthMenu;
+    Bus.$on('loggedIn',()=>{
+        this.onLoggedIn();
+    });
+
+    Bus.$on('logout',()=>{
+        this.onLogout();
+    });
+
+
   }
 }
 </script>

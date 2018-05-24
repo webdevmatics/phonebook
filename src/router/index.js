@@ -1,18 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Home from '@/components/Home'
 import Signup from '@/components/Signup'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
 
 Vue.use(Router)
-
-export default new Router({
+const router=new Router({
   routes: [
     {
       path: '/',
       name: 'Home',
-      component: HelloWorld
+      component: Home
     },
     {
       path: '/signup',
@@ -30,4 +29,22 @@ export default new Router({
       component: Logout
     }
   ]
+});
+
+const openRoutes=['Login','Signup'];
+
+router.beforeEach((to, from, next) => {
+    
+    if(openRoutes.includes(to.name)  ){
+      next()
+    }else if(window.token){
+      next()
+    }else{
+      next('/login')
+    }
+
 })
+
+
+
+export default router
