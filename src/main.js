@@ -5,6 +5,9 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import axios from 'axios'
+
+import store from './store/index'
+
 import 'vuetify/dist/vuetify.min.css'
 
 window.Bus=new Vue;
@@ -25,6 +28,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

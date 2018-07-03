@@ -15,7 +15,7 @@
               <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editedItem.mobile" label="Mobile"></v-text-field>
               </v-flex>
-              
+
               </v-flex>
             </v-layout>
           </v-container>
@@ -80,12 +80,11 @@
        pagination:{rowsPerPage:10},
       dialog: false,
       headers: [
-       
+
         { text: 'Full Name', value: 'fullName' },
         { text: 'Mobile', value: 'mobile' },
         { text: 'Actions', value: 'id', sortable: false }
       ],
-      contacts: [],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -104,6 +103,9 @@
     }),
 
     computed: {
+      contacts () {
+          return this.$store.state.contacts
+      },
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
@@ -127,17 +129,12 @@
     },
 
     methods: {
-        fetchContacts(){
-             axios.get('/contact')
-          .then(response=>{
-              console.log(response);
-              this.contacts=response.data.data;
-          })
-      },
+
       initialize(){
-          this.fetchContacts();
+          this.$store.dispatch('fetchContacts');
+          // this.fetchContacts();
       },
-      
+
 
       editItem (item) {
         this.editedIndex = this.contacts.indexOf(item)
@@ -147,7 +144,7 @@
 
       deleteItem (item) {
         console.log(item);
-        
+
         const index = this.contacts.indexOf(item)
         confirm('Are you sure you want to delete this item?') && this.contacts.splice(index, 1)
           console.log('deleted data');
@@ -155,7 +152,7 @@
           axios.delete('/contact/'+item.id)
           .then(response=>{
             console.log(response);
-            
+
           })
 
       },
@@ -172,15 +169,15 @@
         if (this.editedIndex > -1) {
           console.log('edited data');
           console.log(this.editedItem);
-          
+
 
           axios.put('/contact/'+this.editedItem.id,{name:this.editedItem.fullName, phone: this.editedItem.mobile})
           .then(response=>{
             console.log(response);
-            
+
           })
 
-          
+
           Object.assign(this.contacts[this.editedIndex], this.editedItem)
         } else {
           console.log('created data');
@@ -189,7 +186,7 @@
            axios.post('/contact',{name:this.editedItem.fullName, phone: this.editedItem.mobile})
           .then(response=>{
             console.log(response);
-            
+
           })
 
           this.contacts.push(this.editedItem)
