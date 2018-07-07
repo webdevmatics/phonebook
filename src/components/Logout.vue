@@ -20,7 +20,9 @@ export default {
 
     created(){
       Bus.$emit('logout');
-      localStorage.removeItem('token');
+      this.$store.dispatch('logout').then(()=>{
+        this.$router.push('/login')
+      })
     }
 
 }

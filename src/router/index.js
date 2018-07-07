@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Signup from '@/components/Signup'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
+import store from '../store/index'
 
 Vue.use(Router)
 const router=new Router({
@@ -37,7 +38,7 @@ router.beforeEach((to, from, next) => {
     
     if(openRoutes.includes(to.name)  ){
       next()
-    }else if(window.token){
+    } else if (store.getters.isAuthenticated){
       next()
     }else{
       next('/login')

@@ -37,19 +37,8 @@ export default {
     methods: {
 
       logIn(){
-        axios.post('/login',{email:this.email,password:this.password})
-        .then((response)=>{
-            let accessToken=response.data.auth.access_token;
-            localStorage.setItem('token',accessToken);
-            localStorage.setItem('user',response.data.user.name);
-
-            window.isSignedIn=true;
-
-            Bus.$emit('loggedIn');
+        this.$store.dispatch('login',{email:this.email,password:this.password}).then(()=>{
             this.$router.push('/');
-        })
-        .catch((error)=>{
-            console.log(error);
         })
         
       }

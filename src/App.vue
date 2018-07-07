@@ -19,49 +19,33 @@
 </template>
 
 <script>
+
+import {mapGetters} from 'vuex'
 export default {
   data () {
     return {
       title:"PhoneBook",
-      menus:[],
-      noAuthMenu:[
-      {name:"Signup",route:"Signup"},
-      {name:"Login",route:"Login"}, 
-      ],
-      authMenu:[{
-        name:"Logout",route:"Logout"
-      }]
+      
     }
   },
   name: 'App',
-  methods:{
-
-    onLoggedIn(){
-     
-      this.menus=this.authMenu;
-    },
-    onLogout(){
-     
-      this.menus=this.noAuthMenu;
-    }
-  },
-  mounted(){
-    if(token){
-      this.onLoggedIn();
-    }
-  },
+  computed:mapGetters(['isAuthenticated','menus']),
 
   created(){
-    this.menus=this.noAuthMenu;
-    Bus.$on('loggedIn',()=>{
-        this.onLoggedIn();
-    });
 
-    Bus.$on('logout',()=>{
-        this.onLogout();
+    axios.interceptors.response.use(undefined, function (err) {
+    return new Promise(function (resolve, reject) {
+      if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+        this.$store.dispatch('logout').then(()=>{
+          this.$router.push('/login')
+        })
+      }
+      throw err;
     });
-
+  });
 
   }
+  
+ 
 }
 </script>

@@ -14,7 +14,8 @@ window.token= localStorage.getItem('token');
 window.user= localStorage.getItem('user');
 
 axios.defaults.baseURL = 'http://passport.test/api';
-axios.defaults.headers.common['Authorization'] = "Bearer "+token;
+axios.defaults.headers.common['Authorization'] = "Bearer " + window.token;
+
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.use(Vuetify)

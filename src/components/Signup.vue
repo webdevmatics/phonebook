@@ -39,13 +39,7 @@ export default {
       registerUser(){
         axios.post('/register',{name:this.name,email:this.email,password:this.password})
         .then((response)=>{
-            console.log(response);
-            let accessToken=response.data.auth.access_token;
-            localStorage.setItem('token',accessToken);
-            localStorage.setItem('user',response.data.user.name);
-            Bus.$emit('loggedIn');
-
-            window.isSignedIn=true;
+            Bus.$emit('loggedIn',response);
         })
         .catch((error)=>{
             console.log(error);
